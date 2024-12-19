@@ -123,41 +123,49 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("cutScoreDisplay").textContent = cutScore.toFixed(1);
     }
 
-    // CSV出力機能
-    function exportToCSV() {
-        const csvData = [];
+    // Excel形式で出力
+    function exportToExcel() {
+        const workbook = XLSX.utils.book_new();
+        const basicInfoData = [];
+        const evaluationDataArray = [];
 
         // 基本情報
-        csvData.push(["ブロック名", basicInfo.blockName]);
-        csvData.push(["店舗名", basicInfo.storeName]);
-        csvData.push(["社員番号", basicInfo.employeeId]);
-        csvData.push(["氏名", basicInfo.employeeName]);
-        csvData.push(["現在の基本給", basicInfo.currentSalary]);
+        basicInfoData.push(["ブロック名", basicInfo.blockName]);
+        basicInfoData.push(["店舗名", basicInfo.storeName]);
+        basicInfoData.push(["社員番号", basicInfo.employeeId]);
+        basicInfoData.push(["氏名", basicInfo.employeeName]);
+        basicInfoData.push(["現在の基本給", basicInfo.currentSalary]);
 
         // 評価結果
-        const totalScore = parseFloat(document.getElementById("totalScore").textContent);
-        const rank = document.getElementById("rank").textContent;
-        const salaryCap = parseInt(document.getElementById("salaryCap").textContent.replace(/,/g, ""));
-        const monthlyCuts = parseInt(document.getElementById("monthlyCutsDisplay").textContent.replace(/,/g, ""));
-        const annualCuts = parseInt(document.getElementById("annualCutsDisplay").textContent.replace(/,/g, ""));
-        const cutScore = parseFloat(document.getElementById("cutScoreDisplay").textContent);
+        basicInfoData.push([]);
+        basicInfoData.push(["合計点", document.getElementById("totalScore").textContent]);
+        basicInfoData.push(["評価ランク", document.getElementById("rank").textContent]);
+        basicInfoData.push(["適正基本給", document.getElementById("salaryCap").textContent]);
+        basicInfoData.push(["月間カット人数", document.getElementById("monthlyCutsDisplay").textContent]);
+        basicInfoData.push(["年間カット人数", document.getElementById("annualCutsDisplay").textContent]);
+        basicInfoData.push(["カット点数", document.getElementById("cutScoreDisplay").textContent]);
 
-        csvData.push([]);
-        csvData.push(["合計点", totalScore]);
-        csvData.push(["評価ランク", rank]);
-        csvData.push(["適正基本給", salaryCap]);
-        csvData.push(["月間カット人数", monthlyCuts]);
-        csvData.push(["年間カット人数", annualCuts]);
-        csvData.push(["カット点数", cutScore]);
+        // 評価項目と結果
+        const rows = document.querySelectorAll("#evaluationTable tr");
+        evaluationDataArray.push(["No", "評価項目", "評価内容", "評価点"]);
+        rows.forEach(row => {
+            const cells = row.children;
+            const no = cells[0].textContent;
+            const item = cells[1].textContent;
+            const description = cells[2].textContent;
+            const score = cells[3].querySelector("input").value || 0;
+            evaluationDataArray.push([no, item, description, score]);
+        });
 
-        // CSV文字列の生成
-        const csvContent = csvData.map(row => row.join(",")).join("\n");
+        // シート作成
+        const basicInfoSheet = XLSX.utils.aoa_to_sheet(basicInfoData);
+        const evaluationSheet = XLSX.utils.aoa_to_sheet(evaluationDataArray);
 
-        const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = "evaluation_results.csv";
-        link.click();
+        XLSX.utils.book_append_sheet(workbook, basicInfoSheet, "基本情報と結果");
+        XLSX.utils.book_append_sheet(workbook, evaluationSheet, "評価内容");
+
+        // ファイルの保存
+        XLSX.writeFile(workbook, "evaluation_results.xlsx");
     }
 
     document.getElementById("restartBtn").addEventListener("click", () => {
@@ -170,5 +178,5 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     document.getElementById("calculateBtn").addEventListener("click", calculateResults);
-    document.getElementById("exportBtn").addEventListener("click", exportToCSV);
+    document.getElementById("exportBtn").addEventListener("click", exportToExcel);
 });
