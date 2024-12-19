@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
             console.error("評価ランクデータの読み込みに失敗しました:", error);
         });
 
-    // 基本情報確認とページ切り替え
+    // ページ切り替え (基本情報 → 評価入力)
     document.getElementById("proceedToEvaluation").addEventListener("click", () => {
         basicInfo.blockName = document.getElementById("blockName").value.trim();
         basicInfo.storeName = document.getElementById("storeName").value.trim();
@@ -37,23 +37,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
         basicInfoPage.classList.add("hidden");
         evaluationPage.classList.remove("hidden");
-
         initializeEvaluationItems();
     });
 
-    // 評価入力ページから基本情報ページに戻る
+    // ページ切り替え (評価入力 → 基本情報)
     document.getElementById("backToBasicInfo").addEventListener("click", () => {
         evaluationPage.classList.add("hidden");
         basicInfoPage.classList.remove("hidden");
     });
 
-    // 評価結果ページから評価入力ページに戻る
+    // ページ切り替え (評価結果 → 評価入力)
     document.getElementById("backToEvaluation").addEventListener("click", () => {
         resultPage.classList.add("hidden");
         evaluationPage.classList.remove("hidden");
     });
 
-    // 評価項目を動的に生成
+    // 評価項目の動的生成
     async function initializeEvaluationItems() {
         try {
             const response = await fetch("evaluationItems.json");
@@ -162,22 +161,12 @@ document.addEventListener("DOMContentLoaded", () => {
         const evaluationSheet = XLSX.utils.aoa_to_sheet(evaluationDataArray);
 
         // セル幅の調整
-        basicInfoSheet['!cols'] = [
-            { wch: 20 }, // ブロック名
-            { wch: 30 }  // 内容
-        ];
-
-        evaluationSheet['!cols'] = [
-            { wch: 5 },  // No
-            { wch: 41 }, // 評価項目
-            { wch: 57 }, // 評価内容
-            { wch: 10 }  // 評価点
-        ];
+        basicInfoSheet['!cols'] = [{ wch: 20 }, { wch: 30 }];
+        evaluationSheet['!cols'] = [{ wch: 5 }, { wch: 41 }, { wch: 57 }, { wch: 10 }];
 
         XLSX.utils.book_append_sheet(workbook, basicInfoSheet, "基本情報と結果");
         XLSX.utils.book_append_sheet(workbook, evaluationSheet, "評価内容");
 
-        // ファイルの保存
         XLSX.writeFile(workbook, "evaluation_results.xlsx");
     }
 

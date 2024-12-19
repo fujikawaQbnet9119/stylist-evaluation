@@ -1,11 +1,14 @@
+/* 全体設定 */
 body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
     margin: 0;
     padding: 0;
     background-color: #f4f6f9;
+    color: #333;
 }
 
+/* コンテナ */
 .container {
     max-width: 800px;
     margin: 20px auto;
@@ -15,73 +18,93 @@ body {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+/* 見出し */
 h1 {
     text-align: center;
+    font-size: 2rem;
+    color: #007bff;
     margin-bottom: 20px;
-    font-size: 1.8em;
-    color: #333;
 }
 
+/* フォームグループ */
 .form-group {
     margin-bottom: 15px;
 }
 
 .form-group label {
     display: block;
-    margin-bottom: 5px;
     font-weight: bold;
+    margin-bottom: 5px;
 }
 
 .form-group input {
     width: 100%;
     padding: 8px;
-    font-size: 1em;
+    font-size: 1rem;
     border: 1px solid #ccc;
     border-radius: 5px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.2s ease-in-out;
 }
 
+.form-group input:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* テーブル */
 table {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
+    background: #fdfdfd;
 }
 
 table th, table td {
-    border: 1px solid #ddd;
     padding: 10px;
-    text-align: center;
+    text-align: left;
+    border: 1px solid #ddd;
 }
 
 table th {
-    background: #007bff;
+    background-color: #007bff;
     color: #fff;
+    text-align: center;
+    font-weight: bold;
 }
 
+table tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+/* 追加入力フィールド */
 .additional-input label {
-    display: block;
-    margin-bottom: 5px;
     font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
 }
 
 .additional-input input {
     width: 100%;
     padding: 8px;
-    font-size: 1em;
+    font-size: 1rem;
     border: 1px solid #ccc;
     border-radius: 5px;
 }
 
+/* ボタン */
 button {
     display: inline-block;
-    margin-top: 10px;
     padding: 10px 20px;
-    font-size: 1em;
+    font-size: 1rem;
+    font-weight: bold;
     color: #fff;
     background: #007bff;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    margin-top: 10px;
 }
 
 button:hover {
@@ -89,20 +112,22 @@ button:hover {
 }
 
 #exportBtn {
-    background-color: #28a745; /* CSVボタンの専用色 */
+    background-color: #28a745;
 }
 
 #exportBtn:hover {
-    background-color: #218838; /* ホバー時の専用色 */
+    background-color: #218838;
 }
 
+/* 非表示 */
 .hidden {
     display: none;
 }
 
+/* カード */
 .card {
-    background: #f9f9f9;
-    padding: 15px;
+    background: #fff;
+    padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
@@ -110,4 +135,46 @@ button:hover {
 
 .card-section {
     margin-bottom: 15px;
+}
+
+.card-section h2 {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #f1f1f1;
+    padding-bottom: 5px;
+}
+
+/* 評価結果ページ用 */
+#resultPage .card {
+    background: linear-gradient(145deg, #e8f0fe, #ffffff);
+    color: #007bff;
+}
+
+#resultPage .card-section {
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* メディアクエリ (スマホ対応) */
+@media (max-width: 600px) {
+    .container {
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    table th, table td {
+        font-size: 0.9rem;
+        padding: 8px;
+    }
+
+    button {
+        font-size: 0.9rem;
+        padding: 8px 15px;
+    }
 }
