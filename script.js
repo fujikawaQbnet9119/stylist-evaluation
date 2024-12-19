@@ -158,4 +158,75 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("evaluationForm").reset();
         evaluationTable.innerHTML = "";
     });
+
+    // Excel形式で出力
+    document.getElementById("exportBtn").addEventListener("click", () => {
+        const workbook = XLSX.utils.book_new();
+
+        // 基本情報シート
+        const basicInfoData = [
+            ["ブロック名", basicInfo.blockName],
+            ["店舗名", basicInfo.storeName],
+            ["社員番号", basicInfo.employeeId],
+            ["氏名", basicInfo.employeeName],
+            ["現在の基本給", basicInfo.currentSalary.toLocaleString()],
+        ];
+        const basicInfoSheet = XLSX.utils.aoa_to_sheet(basicInfoData);
+
+        // 列幅を設定
+        basicInfoSheet['!cols'] = [
+            { wch: 15 }, // ブロック名
+            { wch: 30 }  // 内容列の幅
+        ];
+
+        // 評価内容シート
+        const evaluationDataArray = [["No", "カテゴリ", "評価項目", "内容", "点数"]];
+        const rows = document.querySelectorAll("#evaluationTable tr");
+        rows.forEach(row => {
+            const cells = row.querySelectorAll("td");
+            const no = cells[0]?.textContent || "";
+            const category = cells[1]?.textContent || "";
+            const item = cells[2]?.textContent || "";
+            const description = cells[3]?.textContent || "";
+            const score = cells[4]?.querySelector("input")?.value || "";
+            evaluationDataArray.push([no, category, item, description, score]);
+        });
+        const evaluationSheet = XLSX.utils.aoa_to_sheet(evaluationDataArray);
+
+        // 列幅を設定
+        evaluationSheet['!cols'] = [
+            { wch: 5 },  // No
+            { wch: 20 }, // カテゴリ
+            { wch: 25 }, // 評価項目
+            { wch: 50 }, // 内容
+            { wch: 10 }  // 点数
+        ];
+
+        // 結果シート
+        const resultData = [
+            ["合計点", document.getElementById("totalScore").textContent],
+            ["年間カット人数", document.getElementById("annualCutsDisplay").textContent],
+            ["カット点数", document.getElementById("cutScoreDisplay").textContent],
+            ["評価ランク", document.getElementById("rank").textContent],
+            ["適正基本給", document.getElementById("salaryCap").textContent],
+        ];
+        const resultSheet = XLSX.utils.aoa_to_sheet(resultData);
+
+        // 列幅を設定
+        resultSheet['!cols'] = [
+            { wch: 15 }, // ラベル
+            { wch: 20 }  // 値
+        ];
+
+        // シートをブックに追加
+        XLSX.utils.book_append_sheet(workbook, basicInfoSheet, "基本情報");
+        XLSX.utils.book_append_sheet(workbook, evaluationSheet, "評価内容");
+        XLSX.utils.book_append_sheet(workbook, resultSheet, "評価結果");
+
+        // ファイル名に氏名を含める
+        const fileName = `評価結果_${basicInfo.employeeName || "未設定"}.xlsx`;
+        XLSX.writeFile(workbook, fileName);
+    });
+
+
 });
