@@ -1,60 +1,72 @@
 /* 全体設定 */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Roboto', Arial, sans-serif;
     line-height: 1.6;
     margin: 0;
     padding: 0;
-    background-color: #f4f6f9;
+    background-color: #f9f9f9;
     color: #333;
 }
 
 /* コンテナ */
 .container {
-    max-width: 900px;
+    max-width: 960px;
     margin: 20px auto;
     padding: 20px;
-    background: #d0dfff;
+    background: #ffffff;
     border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    box-sizing: border-box; /* ボックスサイズを正確に計算 */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 /* 見出し */
 h1 {
     text-align: center;
-    font-size: 2rem;
-    color: #3a3a3a;
+    font-size: 2.4rem;
+    color: #007bff;
     margin-bottom: 20px;
+    font-weight: bold;
+}
+
+/* サブ見出し */
+h2 {
+    font-size: 1.8rem;
+    color: #444;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 5px;
 }
 
 /* フォームグループ */
 .form-group {
     margin-bottom: 20px;
-    display: flex;
-    flex-direction: column; /* ラベルと入力を縦に配置 */
-    align-items: stretch;
 }
 
 .form-group label {
+    display: block;
     font-weight: bold;
     margin-bottom: 10px;
-    font-size: 1rem;
+    color: #555;
 }
 
 .form-group input {
     width: 100%;
     padding: 12px;
     font-size: 1rem;
-    border: 1px solid #ccc;
+    border: 1px solid #ddd;
     border-radius: 5px;
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-    transition: border-color 0.2s ease-in-out;
-    box-sizing: border-box; /* 幅を正確に調整 */
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
 .form-group input:focus {
-    border-color: #3e3e3f;
+    border-color: #007bff;
     outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* hidden クラス */
+.hidden {
+    display: none;
 }
 
 /* テーブル */
@@ -62,56 +74,51 @@ table {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
-    background: #fdfdfd;
+    background: #ffffff;
     overflow-x: auto;
-    display: block; /* レスポンシブ対応 */
 }
 
-table th, table td {
-    padding: 10px;
+table th,
+table td {
+    padding: 12px;
     text-align: left;
     border: 1px solid #ddd;
+    font-size: 0.9rem;
 }
 
 table th {
     background-color: #007bff;
-    color: #fff;
-    text-align: center;
+    color: #ffffff;
     font-weight: bold;
 }
 
 table tr:nth-child(even) {
-    background-color: #f8f9fa;
+    background-color: #f9f9f9;
 }
 
-/* テーブル内入力フィールド */
-table td input {
-    width: 100%;
-    max-width: 150px;
-    padding: 10px;
-    font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box; /* 幅を正確に調整 */
+table tr:hover {
+    background-color: #f1f7ff;
 }
 
 /* ボタン */
 button {
     display: inline-block;
-    padding: 12px 20px;
+    padding: 12px 25px;
     font-size: 1.1rem;
     font-weight: bold;
-    color: #fff;
+    color: #ffffff;
     background: #007bff;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease-in-out, transform 0.2s ease;
     margin-top: 15px;
+    text-align: center;
 }
 
 button:hover {
     background: #0056b3;
+    transform: translateY(-2px);
 }
 
 #exportBtn {
@@ -122,86 +129,85 @@ button:hover {
     background-color: #218838;
 }
 
-/* 非表示 */
-.hidden {
-    display: none;
-}
-
 /* カード */
 .card {
-    background: #fff;
+    background: #ffffff;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
-    box-sizing: border-box;
 }
 
 .card-section {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 
-.card-section h2 {
+.card-section h3 {
     font-size: 1.5rem;
     color: #333;
     margin-bottom: 10px;
-    border-bottom: 2px solid #f1f1f1;
-    padding-bottom: 5px;
 }
 
-/* スマホ対応 */
+/* 評価結果ページ用 */
+#resultPage .card {
+    background: linear-gradient(145deg, #eaf2ff, #ffffff);
+    color: #0a0a0a;
+}
+
+#resultPage .card-section {
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* メディアクエリ (スマホ対応) */
 @media (max-width: 600px) {
     .container {
-        padding: 10px;
-        max-width: 100%; /* コンテナ幅を画面に合わせる */
+        padding: 15px;
     }
 
     h1 {
-        font-size: 1.6rem;
+        font-size: 2rem;
     }
 
-    .form-group input {
-        width: 100%; /* 入力フィールドが画面幅に収まる */
-        font-size: 1rem;
-        padding: 12px;
+    h2 {
+        font-size: 1.5rem;
     }
 
-    table {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap; /* 横スクロールを許可 */
-    }
-
-    table th, table td {
-        font-size: 0.9rem;
+    table th,
+    table td {
+        font-size: 0.85rem;
         padding: 8px;
-    }
-
-    table td input {
-        width: 100%; /* スマホ画面でもフィールドが収まる */
-        max-width: 100%; /* 横幅を最大化 */
-        padding: 12px;
-        font-size: 0.9rem;
     }
 
     button {
         font-size: 1rem;
         padding: 10px 15px;
     }
+
+    .form-group input {
+        padding: 10px;
+        font-size: 0.9rem;
+    }
 }
 
-/* タブレット対応 */
+/* メディアクエリ (タブレット対応) */
 @media (max-width: 900px) {
     .container {
-        padding: 15px;
+        padding: 18px;
     }
 
     h1 {
-        font-size: 1.8rem;
+        font-size: 2.2rem;
+    }
+
+    h2 {
+        font-size: 1.6rem;
     }
 
     button {
         font-size: 1rem;
-        padding: 12px 18px;
+        padding: 12px 20px;
     }
 }
