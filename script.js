@@ -167,8 +167,13 @@ document.addEventListener("DOMContentLoaded", () => {
         XLSX.utils.book_append_sheet(workbook, basicInfoSheet, "基本情報と結果");
         XLSX.utils.book_append_sheet(workbook, evaluationSheet, "評価内容");
 
-        XLSX.writeFile(workbook, "evaluation_results.xlsx");
+        // ファイル名に氏名を含める
+        const fileName = `評価データ ${basicInfo.employeeName }.xlsx`;
+
+        // ファイルの保存
+        XLSX.writeFile(workbook, fileName);
     }
+
 
     document.getElementById("restartBtn").addEventListener("click", () => {
         resultPage.classList.add("hidden");
