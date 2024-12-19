@@ -59,10 +59,12 @@ document.addEventListener("DOMContentLoaded", () => {
             const evaluationItems = await response.json();
 
             evaluationTable.innerHTML = ""; // 再生成時のクリア
-            evaluationItems.forEach(({ no, item, description, max }) => {
+
+            evaluationItems.forEach(({ no, category, item, description, max }) => {
                 const row = document.createElement("tr");
                 row.innerHTML = `
                     <td>${no}</td>
+                    <td>${category}</td>
                     <td>${item}</td>
                     <td>${description}</td>
                     <td>
@@ -86,7 +88,6 @@ document.addEventListener("DOMContentLoaded", () => {
             console.error("評価項目データの読み込みに失敗しました:", error);
         }
     }
-
 
     // 条件式による点数計算
     function calculateMonthlyCutScore(cutCount) {
@@ -160,14 +161,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // 評価項目と結果
         const rows = document.querySelectorAll("#evaluationTable tr");
-        evaluationDataArray.push(["No", "評価項目", "評価内容", "評価点"]);
+        evaluationDataArray.push(["No", "評価カテゴリ", "評価項目", "評価内容", "評価点"]);
         rows.forEach(row => {
             const cells = row.children;
             const no = cells[0].textContent;
-            const item = cells[1].textContent;
-            const description = cells[2].textContent;
-            const score = cells[3].querySelector("input").value || 0;
-            evaluationDataArray.push([no, item, description, score]);
+            const category = cells[1].textContent;
+            const item = cells[2].textContent;
+            const description = cells[3].textContent;
+            const score = cells[4].querySelector("input").value || 0;
+            evaluationDataArray.push([no, category, item, description, score]);
         });
 
         // シート作成
@@ -176,18 +178,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // セル幅の調整
         basicInfoSheet['!cols'] = [{ wch: 20 }, { wch: 30 }];
-        evaluationSheet['!cols'] = [{ wch: 5 }, { wch: 41 }, { wch: 57 }, { wch: 10 }];
+        evaluationSheet['!cols'] = [{ wch: 5 }, { wch: 25 }, { wch: 42 }, { wch: 106 }, { wch: 7 }];
 
         XLSX.utils.book_append_sheet(workbook, basicInfoSheet, "基本情報と結果");
         XLSX.utils.book_append_sheet(workbook, evaluationSheet, "評価内容");
 
         // ファイル名に氏名を含める
-        const fileName = `評価データ ${basicInfo.employeeName }.xlsx`;
+        const fileName = `評価データ_${basicInfo.employeeName}.xlsx`;
 
         // ファイルの保存
         XLSX.writeFile(workbook, fileName);
     }
-
 
     document.getElementById("restartBtn").addEventListener("click", () => {
         resultPage.classList.add("hidden");
