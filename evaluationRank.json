@@ -1,0 +1,198 @@
+[
+    {
+        "min_score": 0,
+        "max_score": 93,
+        "rank": "D1",
+        "salary_increase": -7000,
+        "salary_cap": 224000
+    },
+    {
+        "min_score": 94,
+        "max_score": 96,
+        "rank": "D2",
+        "salary_increase": -6000,
+        "salary_cap": 227500
+    },
+    {
+        "min_score": 97,
+        "max_score": 99,
+        "rank": "D3",
+        "salary_increase": -5000,
+        "salary_cap": 231000
+    },
+    {
+        "min_score": 100,
+        "max_score": 102,
+        "rank": "D4",
+        "salary_increase": -4000,
+        "salary_cap": 234500
+    },
+    {
+        "min_score": 103,
+        "max_score": 105,
+        "rank": "D5",
+        "salary_increase": -3000,
+        "salary_cap": 238000
+    },
+    {
+        "min_score": 106,
+        "max_score": 108,
+        "rank": "C1",
+        "salary_increase": -2000,
+        "salary_cap": 241500
+    },
+    {
+        "min_score": 109,
+        "max_score": 111,
+        "rank": "C2",
+        "salary_increase": -1000,
+        "salary_cap": 245000
+    },
+    {
+        "min_score": 112,
+        "max_score": 114,
+        "rank": "C3",
+        "salary_increase": 0,
+        "salary_cap": 248500
+    },
+    {
+        "min_score": 115,
+        "max_score": 117,
+        "rank": "C4",
+        "salary_increase": 1000,
+        "salary_cap": 252000
+    },
+    {
+        "min_score": 118,
+        "max_score": 120,
+        "rank": "C5",
+        "salary_increase": 2000,
+        "salary_cap": 255500
+    },
+    {
+        "min_score": 121,
+        "max_score": 123,
+        "rank": "B1",
+        "salary_increase": 3000,
+        "salary_cap": 259000
+    },
+    {
+        "min_score": 124,
+        "max_score": 126,
+        "rank": "B2",
+        "salary_increase": 4000,
+        "salary_cap": 262500
+    },
+    {
+        "min_score": 127,
+        "max_score": 129,
+        "rank": "B3",
+        "salary_increase": 5000,
+        "salary_cap": 266000
+    },
+    {
+        "min_score": 130,
+        "max_score": 132,
+        "rank": "B4",
+        "salary_increase": 6000,
+        "salary_cap": 269500
+    },
+    {
+        "min_score": 133,
+        "max_score": 135,
+        "rank": "B5",
+        "salary_increase": 7000,
+        "salary_cap": 273000
+    },
+    {
+        "min_score": 136,
+        "max_score": 138,
+        "rank": "A1",
+        "salary_increase": 8000,
+        "salary_cap": 276500
+    },
+    {
+        "min_score": 139,
+        "max_score": 141,
+        "rank": "A2",
+        "salary_increase": 9000,
+        "salary_cap": 280000
+    },
+    {
+        "min_score": 142,
+        "max_score": 144,
+        "rank": "A3",
+        "salary_increase": 10000,
+        "salary_cap": 283500
+    },
+    {
+        "min_score": 145,
+        "max_score": 147,
+        "rank": "A4",
+        "salary_increase": 11000,
+        "salary_cap": 287000
+    },
+    {
+        "min_score": 148,
+        "max_score": 150,
+        "rank": "A5",
+        "salary_increase": 12000,
+        "salary_cap": 290500
+    },
+    {
+        "min_score": 151,
+        "max_score": 153,
+        "rank": "S1",
+        "salary_increase": 13000,
+        "salary_cap": 292500
+    },
+    {
+        "min_score": 154,
+        "max_score": 156,
+        "rank": "S2",
+        "salary_increase": 14000,
+        "salary_cap": 292500
+    },
+    {
+        "min_score": 157,
+        "max_score": 159,
+        "rank": "S3",
+        "salary_increase": 15000,
+        "salary_cap": 292500
+    },
+    {
+        "min_score": 160,
+        "max_score": 162,
+        "rank": "S4",
+        "salary_increase": 16000,
+        "salary_cap": 292500
+    },
+    {
+        "min_score": 163,
+        "max_score": 165,
+        "rank": "S5",
+        "salary_increase": 17000,
+        "salary_cap": 292500
+    },
+    {
+        "min_score": 166,
+        "max_score": 168,
+        "rank": "SS1",
+        "salary_increase": 18000,
+        "salary_cap": 292500
+    },
+    {
+        "min_score": 169,
+        "max_score": 171,
+        "rank": "SS2",
+        "salary_increase": 19000,
+        "salary_cap": 292500
+    },
+    {
+        "min_score": 172,
+        "max_score": null,
+        "rank": "SS3",
+        "salary_increase": 20000,
+        "salary_cap": 292500
+    }
+]
