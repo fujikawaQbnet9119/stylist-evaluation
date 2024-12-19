@@ -10,7 +10,7 @@ body {
 
 /* コンテナ */
 .container {
-    max-width: 800px;
+    max-width: 900px;
     margin: 20px auto;
     padding: 20px;
     background: #d0dfff;
@@ -21,7 +21,7 @@ body {
 /* 見出し */
 h1 {
     text-align: center;
-    font-size: 2rem;
+    font-size: 2.2rem;
     color: #3a3a3a;
     margin-bottom: 20px;
 }
@@ -38,8 +38,8 @@ h1 {
 }
 
 .form-group input {
-    width: 100%;
-    padding: 12px;
+    width: 95%;
+    padding: 14px;
     font-size: 1rem;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -88,7 +88,7 @@ table tr:nth-child(even) {
 
 .additional-input input {
     width: 100%;
-    padding: 8px;
+    padding: 10px;
     font-size: 1rem;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -98,7 +98,7 @@ table tr:nth-child(even) {
 button {
     display: inline-block;
     padding: 12px 20px;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-weight: bold;
     color: #fff;
     background: #007bff;
@@ -170,6 +170,12 @@ button:hover {
         font-size: 1.8rem;
     }
 
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
     table th, table td {
         font-size: 0.9rem;
         padding: 8px;
@@ -183,5 +189,21 @@ button:hover {
     .form-group input {
         padding: 10px;
         font-size: 0.9rem;
+    }
+}
+
+/* メディアクエリ (タブレット対応) */
+@media (max-width: 900px) {
+    .container {
+        padding: 18px;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    button {
+        font-size: 1rem;
+        padding: 12px 18px;
     }
 }
