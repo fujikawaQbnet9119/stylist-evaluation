@@ -13,7 +13,7 @@ body {
     max-width: 800px;
     margin: 20px auto;
     padding: 20px;
-    background: #fff;
+    background: #d0dfff;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -22,7 +22,7 @@ body {
 h1 {
     text-align: center;
     font-size: 2rem;
-    color: #007bff;
+    color: #3a3a3a;
     margin-bottom: 20px;
 }
 
@@ -48,7 +48,7 @@ h1 {
 }
 
 .form-group input:focus {
-    border-color: #007bff;
+    border-color: #3e3e3f;
     outline: none;
 }
 
@@ -148,7 +148,7 @@ button:hover {
 /* 評価結果ページ用 */
 #resultPage .card {
     background: linear-gradient(145deg, #e8f0fe, #ffffff);
-    color: #007bff;
+    color: #0a0a0a;
 }
 
 #resultPage .card-section {
