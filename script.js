@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
         evaluationPage.classList.remove("hidden");
     });
 
-    // 評価項目の動的生成
+    // 評価項目を動的に生成
     async function initializeEvaluationItems() {
         try {
             const response = await fetch("evaluationItems.json");
@@ -65,14 +65,28 @@ document.addEventListener("DOMContentLoaded", () => {
                     <td>${no}</td>
                     <td>${item}</td>
                     <td>${description}</td>
-                    <td><input type="number" min="0" max="${max}" value="0" class="scoreInput"></td>
+                    <td>
+                        <input type="number" min="0" max="${max}" value="0" class="scoreInput" />
+                    </td>
                 `;
                 evaluationTable.appendChild(row);
+
+                // 入力制限イベントを追加
+                const inputField = row.querySelector("input");
+                inputField.addEventListener("input", () => {
+                    const value = parseInt(inputField.value, 10) || 0;
+                    if (value > max) {
+                        inputField.value = max; // 最大値に強制変更
+                    } else if (value < 0) {
+                        inputField.value = 0; // 最小値に強制変更
+                    }
+                });
             });
         } catch (error) {
             console.error("評価項目データの読み込みに失敗しました:", error);
         }
     }
+
 
     // 条件式による点数計算
     function calculateMonthlyCutScore(cutCount) {
