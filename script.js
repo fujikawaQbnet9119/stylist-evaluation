@@ -161,6 +161,19 @@ document.addEventListener("DOMContentLoaded", () => {
         const basicInfoSheet = XLSX.utils.aoa_to_sheet(basicInfoData);
         const evaluationSheet = XLSX.utils.aoa_to_sheet(evaluationDataArray);
 
+        // セル幅の調整
+        basicInfoSheet['!cols'] = [
+            { wch: 20 }, // ブロック名
+            { wch: 30 }  // 内容
+        ];
+
+        evaluationSheet['!cols'] = [
+            { wch: 5 },  // No
+            { wch: 41 }, // 評価項目
+            { wch: 57 }, // 評価内容
+            { wch: 10 }  // 評価点
+        ];
+
         XLSX.utils.book_append_sheet(workbook, basicInfoSheet, "基本情報と結果");
         XLSX.utils.book_append_sheet(workbook, evaluationSheet, "評価内容");
 
