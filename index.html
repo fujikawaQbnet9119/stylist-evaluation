@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>スタイリスト評価フォーム</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/choices.js/10.2.0/styles/choices.min.css">
     <link rel="stylesheet" href="styles.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/choices.js/10.2.0/choices.min.js"></script>
 </head>
 <body>
     <!-- 基本情報入力ページ -->
@@ -44,10 +45,10 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>評価カテゴリ</th>
+                        <th>カテゴリ</th>
                         <th>評価項目</th>
                         <th>評価内容</th>
-                        <th>評価点</th>
+                        <th>評価点数</th>
                     </tr>
                 </thead>
                 <tbody id="evaluationTable">

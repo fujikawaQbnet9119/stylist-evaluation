@@ -16,12 +16,13 @@ body {
     background: #d0dfff;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box; /* ボックスサイズを正確に計算 */
 }
 
 /* 見出し */
 h1 {
     text-align: center;
-    font-size: 2.2rem;
+    font-size: 2rem;
     color: #3a3a3a;
     margin-bottom: 20px;
 }
@@ -29,22 +30,26 @@ h1 {
 /* フォームグループ */
 .form-group {
     margin-bottom: 20px;
+    display: flex;
+    flex-direction: column; /* ラベルと入力を縦に配置 */
+    align-items: stretch;
 }
 
 .form-group label {
-    display: block;
     font-weight: bold;
     margin-bottom: 10px;
+    font-size: 1rem;
 }
 
 .form-group input {
-    width: 95%;
-    padding: 14px;
+    width: 100%;
+    padding: 12px;
     font-size: 1rem;
     border: 1px solid #ccc;
     border-radius: 5px;
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
     transition: border-color 0.2s ease-in-out;
+    box-sizing: border-box; /* 幅を正確に調整 */
 }
 
 .form-group input:focus {
@@ -59,7 +64,7 @@ table {
     margin-bottom: 20px;
     background: #fdfdfd;
     overflow-x: auto;
-    display: block;
+    display: block; /* レスポンシブ対応 */
 }
 
 table th, table td {
@@ -79,19 +84,15 @@ table tr:nth-child(even) {
     background-color: #f8f9fa;
 }
 
-/* 追加入力フィールド */
-.additional-input label {
-    font-weight: bold;
-    margin-bottom: 5px;
-    display: block;
-}
-
-.additional-input input {
+/* テーブル内入力フィールド */
+table td input {
     width: 100%;
+    max-width: 150px;
     padding: 10px;
     font-size: 1rem;
     border: 1px solid #ccc;
     border-radius: 5px;
+    box-sizing: border-box; /* 幅を正確に調整 */
 }
 
 /* ボタン */
@@ -133,6 +134,7 @@ button:hover {
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
+    box-sizing: border-box;
 }
 
 .card-section {
@@ -147,33 +149,27 @@ button:hover {
     padding-bottom: 5px;
 }
 
-/* 評価結果ページ用 */
-#resultPage .card {
-    background: linear-gradient(145deg, #e8f0fe, #ffffff);
-    color: #0a0a0a;
-}
-
-#resultPage .card-section {
-    padding: 10px;
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* メディアクエリ (スマホ対応) */
+/* スマホ対応 */
 @media (max-width: 600px) {
     .container {
-        padding: 15px;
+        padding: 10px;
+        max-width: 100%; /* コンテナ幅を画面に合わせる */
     }
 
     h1 {
-        font-size: 1.8rem;
+        font-size: 1.6rem;
+    }
+
+    .form-group input {
+        width: 100%; /* 入力フィールドが画面幅に収まる */
+        font-size: 1rem;
+        padding: 12px;
     }
 
     table {
         display: block;
         overflow-x: auto;
-        white-space: nowrap;
+        white-space: nowrap; /* 横スクロールを許可 */
     }
 
     table th, table td {
@@ -181,25 +177,27 @@ button:hover {
         padding: 8px;
     }
 
+    table td input {
+        width: 100%; /* スマホ画面でもフィールドが収まる */
+        max-width: 100%; /* 横幅を最大化 */
+        padding: 12px;
+        font-size: 0.9rem;
+    }
+
     button {
         font-size: 1rem;
         padding: 10px 15px;
     }
-
-    .form-group input {
-        padding: 10px;
-        font-size: 0.9rem;
-    }
 }
 
-/* メディアクエリ (タブレット対応) */
+/* タブレット対応 */
 @media (max-width: 900px) {
     .container {
-        padding: 18px;
+        padding: 15px;
     }
 
     h1 {
-        font-size: 2rem;
+        font-size: 1.8rem;
     }
 
     button {
