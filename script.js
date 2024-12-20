@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const resultPage = document.getElementById("resultPage");
     const evaluationTable = document.getElementById("evaluationTable");
     const toggleButton = document.getElementById("toggleEvaluationContent"); // 評価内容の表示/非表示ボタン
-    const categoryFilter = document.getElementById("categoryFilter"); // カテゴリフィルタ
+    const categoryFilter = document.getElementById("categoryFilter"); // フィルタの取得
 
     const basicInfo = {};
     let evaluationData = [];
@@ -34,6 +34,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // ページ遷移関数
     const switchPage = (hidePage, showPage) => {
+        if (!hidePage || !showPage) {
+            console.error("ページが見つかりません。", { hidePage, showPage });
+            return;
+        }
+        console.log("ページ切り替え:", { hidePage, showPage });
         hidePage.classList.add("hidden");
         showPage.classList.remove("hidden");
     };
@@ -54,14 +59,12 @@ document.addEventListener("DOMContentLoaded", () => {
             `;
             evaluationTable.appendChild(row);
 
-            // 入力制御イベントを追加
             const inputField = row.querySelector("input");
             inputField.addEventListener("input", () => {
                 const validPoints = inputField.dataset.points.split(",").map(Number);
                 const inputValue = parseInt(inputField.value, 10);
 
                 if (!validPoints.includes(inputValue)) {
-                    alert(`入力可能な値は次のいずれかです: ${validPoints.join(", ")}`);
                     inputField.value = Math.max(...validPoints);
                 }
             });
@@ -160,7 +163,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById("calculateBtn")?.addEventListener("click", calculateResults);
 
+    document.getElementById("backToBasicInfo")?.addEventListener("click", () => {
+        console.log("評価入力ページ -> 基本情報ページ");
+        switchPage(evaluationPage, basicInfoPage);
+    });
+
+    document.getElementById("backToEvaluation")?.addEventListener("click", () => {
+        console.log("評価結果ページ -> 評価入力ページ");
+        switchPage(resultPage, evaluationPage);
+    });
+
     document.getElementById("restartBtn")?.addEventListener("click", () => {
+        console.log("評価結果ページ -> 基本情報ページ");
         switchPage(resultPage, basicInfoPage);
         document.getElementById("basicInfoForm").reset();
         document.getElementById("evaluationForm").reset();
@@ -202,6 +216,7 @@ document.addEventListener("DOMContentLoaded", () => {
             { wch: 107 },
             { wch: 10 }
         ];
+
 
         // 結果シート
         const resultSheet = XLSX.utils.aoa_to_sheet([
