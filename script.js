@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <td>${no}</td>
                 <td>${category}</td>
                 <td>${item}</td>
-                <td>${description}</td>
+                <td class="evaluation-content">${description}</td>
                 <td>
                     <input type="number" class="scoreInput" data-points="${points.join(",")}" />
                 </td>
@@ -97,6 +97,19 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         });
     }
+
+    // 評価内容の表示/非表示ボタンの実装
+    const toggleButton = document.getElementById("toggleEvaluationContent");
+    toggleButton.addEventListener("click", () => {
+        const contentCells = document.querySelectorAll(".evaluation-content");
+        const isVisible = contentCells[0]?.style.display !== "none";
+
+        contentCells.forEach(cell => {
+            cell.style.display = isVisible ? "none" : "table-cell";
+        });
+
+        toggleButton.textContent = isVisible ? "評価内容を表示" : "評価内容を非表示";
+    });
 
     // 評価結果の計算と表示
     document.getElementById("calculateBtn").addEventListener("click", () => {
@@ -195,10 +208,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // 列幅を設定
         evaluationSheet['!cols'] = [
-            { wch: 5 },  // No
-            { wch: 20 }, // カテゴリ
-            { wch: 25 }, // 評価項目
-            { wch: 50 }, // 内容
+            { wch: 3 },  // No
+            { wch: 25 }, // カテゴリ
+            { wch: 42 }, // 評価項目
+            { wch: 107 }, // 内容
             { wch: 10 }  // 点数
         ];
 
