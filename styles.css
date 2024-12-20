@@ -223,3 +223,44 @@ button:hover {
         display: none; /* スマホでは評価内容を非表示 */
     }
 }
+/* スライダーのスタイル */
+.scoreSlider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 8px;
+    border-radius: 5px;
+    background: #ddd;
+    outline: none;
+    opacity: 0.9;
+    transition: opacity 0.3s;
+    margin: 5px 0;
+}
+
+.scoreSlider:hover {
+    opacity: 1;
+}
+
+.scoreSlider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #007bff;
+    cursor: pointer;
+}
+
+.scoreSlider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #007bff;
+    cursor: pointer;
+}
+
+/* スライダーの値表示 */
+.sliderValue {
+    font-size: 14px;
+    color: #333;
+    margin-left: 10px;
+}

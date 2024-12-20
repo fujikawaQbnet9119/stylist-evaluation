@@ -56,32 +56,21 @@ document.addEventListener("DOMContentLoaded", () => {
                 <td>${category}</td>
                 <td>${item}</td>
                 <td class="evaluation-content">${description}</td>
-                <td>
+                <td style="text-align: center;">
                     <input type="range" 
-                        class="scoreInput" 
-                        data-points="${points.join(",")}" 
+                        class="scoreSlider" 
                         min="${minPoint}" 
                         max="${maxPoint}" 
                         value="${maxPoint}" 
                         step="1" 
-                        oninput="this.nextElementSibling.value = this.value" />
-                    <output>${maxPoint}</output>
+                        oninput="this.nextElementSibling.textContent = this.value" />
+                    <span class="sliderValue">${maxPoint}</span>
                 </td>
             `;
             evaluationTable.appendChild(row);
-    
-            const inputField = row.querySelector("input");
-            inputField.addEventListener("change", () => {
-                const validPoints = inputField.dataset.points.split(",").map(Number);
-                const inputValue = parseInt(inputField.value, 10);
-    
-                if (!validPoints.includes(inputValue)) {
-                    inputField.value = maxPoint; // 初期値を最高点に戻す
-                    inputField.nextElementSibling.value = maxPoint;
-                }
-            });
         });
     };
+    
     
 
     // カテゴリフィルタの初期化
