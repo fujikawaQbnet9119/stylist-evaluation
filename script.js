@@ -77,22 +77,22 @@ document.addEventListener("DOMContentLoaded", () => {
                 <td>${no}</td>
                 <td>${category}</td>
                 <td>${item}</td>
-                <td class="evaluation-content">${description}</td>
+                <td>${description}</td>
                 <td>
-                    <input type="number" class="scoreInput" data-points="${points.join(",")}" />
+                    <input type="number" class="scoreInput" data-points="${points.join(",")}" value="${Math.max(...points)}" />
                 </td>
             `;
             evaluationTable.appendChild(row);
-
+    
             // 入力制御イベントを追加
             const inputField = row.querySelector("input");
             inputField.addEventListener("input", () => {
                 const validPoints = inputField.dataset.points.split(",").map(Number);
                 const inputValue = parseInt(inputField.value, 10);
-
+    
                 if (!validPoints.includes(inputValue)) {
                     alert(`入力可能な値は次のいずれかです: ${validPoints.join(", ")}`);
-                    inputField.value = "";
+                    inputField.value = Math.max(...validPoints); // 初期値として最高点を再設定
                 }
             });
         });
