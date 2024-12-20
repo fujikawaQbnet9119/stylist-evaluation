@@ -48,28 +48,41 @@ document.addEventListener("DOMContentLoaded", () => {
         evaluationTable.innerHTML = ""; // 再生成時のクリア
         evaluationData.forEach(({ no, category, item, description, points }) => {
             const row = document.createElement("tr");
+            const maxPoint = Math.max(...points);
+            const minPoint = Math.min(...points);
+    
             row.innerHTML = `
                 <td>${no}</td>
                 <td>${category}</td>
                 <td>${item}</td>
                 <td class="evaluation-content">${description}</td>
                 <td>
-                    <input type="number" class="scoreInput" data-points="${points.join(",")}" value="${Math.max(...points)}" />
+                    <input type="range" 
+                        class="scoreInput" 
+                        data-points="${points.join(",")}" 
+                        min="${minPoint}" 
+                        max="${maxPoint}" 
+                        value="${maxPoint}" 
+                        step="1" 
+                        oninput="this.nextElementSibling.value = this.value" />
+                    <output>${maxPoint}</output>
                 </td>
             `;
             evaluationTable.appendChild(row);
-
+    
             const inputField = row.querySelector("input");
-            inputField.addEventListener("input", () => {
+            inputField.addEventListener("change", () => {
                 const validPoints = inputField.dataset.points.split(",").map(Number);
                 const inputValue = parseInt(inputField.value, 10);
-
+    
                 if (!validPoints.includes(inputValue)) {
-                    inputField.value = Math.max(...validPoints);
+                    inputField.value = maxPoint; // 初期値を最高点に戻す
+                    inputField.nextElementSibling.value = maxPoint;
                 }
             });
         });
     };
+    
 
     // カテゴリフィルタの初期化
     const initializeCategoryFilter = () => {

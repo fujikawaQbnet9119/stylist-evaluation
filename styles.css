@@ -211,3 +211,15 @@ button:hover {
         padding: 12px 20px;
     }
 }
+/* スマホでの入力を改善 */
+@media (max-width: 768px) {
+    input[type="range"] {
+        width: 100%;
+    }
+    td {
+        font-size: 14px;
+    }
+    .evaluation-content {
+        display: none; /* スマホでは評価内容を非表示 */
+    }
+}
