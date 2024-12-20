@@ -1,75 +1,45 @@
 document.addEventListener("DOMContentLoaded", () => {
+    // DOM要素の取得
     const basicInfoPage = document.getElementById("basicInfoPage");
     const evaluationPage = document.getElementById("evaluationPage");
     const resultPage = document.getElementById("resultPage");
     const evaluationTable = document.getElementById("evaluationTable");
+    const toggleButton = document.getElementById("toggleEvaluationContent"); // 評価内容の表示/非表示ボタン
+    const categoryFilter = document.getElementById("categoryFilter"); // カテゴリフィルタ
 
     const basicInfo = {};
     let evaluationData = [];
     let rankData = [];
 
-    // JSONデータをロード (評価項目)
-    fetch("evaluationItems.json")
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error(`HTTPエラー: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then((data) => {
-            evaluationData = data;
-        })
-        .catch((error) => {
-            console.error("評価項目データの読み込みに失敗しました:", error);
-        });
-
-    // JSONデータをロード (ランク表)
-    fetch("evaluationRank.json")
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error(`HTTPエラー: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then((data) => {
-            rankData = data;
-        })
-        .catch((error) => {
-            console.error("ランクデータの読み込みに失敗しました:", error);
-        });
-
-    // ページ切り替え (基本情報 → 評価入力)
-    document.getElementById("proceedToEvaluation").addEventListener("click", () => {
-        basicInfo.blockName = document.getElementById("blockName").value.trim();
-        basicInfo.storeName = document.getElementById("storeName").value.trim();
-        basicInfo.employeeId = document.getElementById("employeeId").value.trim();
-        basicInfo.employeeName = document.getElementById("employeeName").value.trim();
-        basicInfo.currentSalary = parseFloat(document.getElementById("currentSalary").value) || 0;
-
-        if (!basicInfo.blockName || !basicInfo.storeName || !basicInfo.employeeId || !basicInfo.employeeName || !basicInfo.currentSalary) {
-            alert("すべての項目を正しく入力してください！");
-            return;
+    // JSONデータをロードする関数
+    const loadJSON = async (url, callback) => {
+        try {
+            const response = await fetch(url);
+            if (!response.ok) throw new Error(`HTTPエラー: ${response.status}`);
+            const data = await response.json();
+            callback(data);
+        } catch (error) {
+            console.error(`${url}の読み込みに失敗しました:`, error);
         }
+    };
 
-        basicInfoPage.classList.add("hidden");
-        evaluationPage.classList.remove("hidden");
-        initializeEvaluationItems();
-    });
+    // 初期化関数
+    const initialize = () => {
+        loadJSON("evaluationItems.json", data => {
+            evaluationData = data;
+            initializeCategoryFilter();
+        });
+        loadJSON("evaluationRank.json", data => (rankData = data));
+    };
 
-    // ページ切り替え (評価入力 → 基本情報)
-    document.getElementById("backToBasicInfo").addEventListener("click", () => {
-        evaluationPage.classList.add("hidden");
-        basicInfoPage.classList.remove("hidden");
-    });
-
-    // ページ切り替え (評価結果 → 評価入力)
-    document.getElementById("backToEvaluation").addEventListener("click", () => {
-        resultPage.classList.add("hidden");
-        evaluationPage.classList.remove("hidden");
-    });
+    // ページ遷移関数
+    const switchPage = (hidePage, showPage) => {
+        hidePage.classList.add("hidden");
+        showPage.classList.remove("hidden");
+    };
 
     // 評価項目を動的に生成
-    function initializeEvaluationItems() {
+    const initializeEvaluationItems = () => {
         evaluationTable.innerHTML = ""; // 再生成時のクリア
         evaluationData.forEach(({ no, category, item, description, points }) => {
             const row = document.createElement("tr");
@@ -77,30 +47,50 @@ document.addEventListener("DOMContentLoaded", () => {
                 <td>${no}</td>
                 <td>${category}</td>
                 <td>${item}</td>
-                <td>${description}</td>
+                <td class="evaluation-content">${description}</td>
                 <td>
                     <input type="number" class="scoreInput" data-points="${points.join(",")}" value="${Math.max(...points)}" />
                 </td>
             `;
             evaluationTable.appendChild(row);
-    
+
             // 入力制御イベントを追加
             const inputField = row.querySelector("input");
             inputField.addEventListener("input", () => {
                 const validPoints = inputField.dataset.points.split(",").map(Number);
                 const inputValue = parseInt(inputField.value, 10);
-    
+
                 if (!validPoints.includes(inputValue)) {
                     alert(`入力可能な値は次のいずれかです: ${validPoints.join(", ")}`);
-                    inputField.value = Math.max(...validPoints); // 初期値として最高点を再設定
+                    inputField.value = Math.max(...validPoints);
                 }
             });
         });
-    }
+    };
+
+    // カテゴリフィルタの初期化
+    const initializeCategoryFilter = () => {
+        categoryFilter.innerHTML = '<option value="all">すべて</option>';
+        const categories = [...new Set(evaluationData.map(item => item.category))];
+        categories.forEach(category => {
+            const option = document.createElement("option");
+            option.value = category;
+            option.textContent = category;
+            categoryFilter.appendChild(option);
+        });
+    };
+
+    // カテゴリフィルタ変更時の動作
+    categoryFilter?.addEventListener("change", e => {
+        const category = e.target.value;
+        document.querySelectorAll("#evaluationTable tr").forEach(row => {
+            const rowCategory = row.querySelector("td:nth-child(2)").textContent;
+            row.style.display = category === "all" || rowCategory === category ? "" : "none";
+        });
+    });
 
     // 評価内容の表示/非表示ボタンの実装
-    const toggleButton = document.getElementById("toggleEvaluationContent");
-    toggleButton.addEventListener("click", () => {
+    toggleButton?.addEventListener("click", () => {
         const contentCells = document.querySelectorAll(".evaluation-content");
         const isVisible = contentCells[0]?.style.display !== "none";
 
@@ -112,13 +102,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // 評価結果の計算と表示
-    document.getElementById("calculateBtn").addEventListener("click", () => {
+    const calculateResults = () => {
         let totalScore = 0;
-        const inputs = document.querySelectorAll(".scoreInput");
-
-        inputs.forEach(input => {
-            const value = parseFloat(input.value) || 0;
-            totalScore += value;
+        document.querySelectorAll(".scoreInput").forEach(input => {
+            totalScore += parseFloat(input.value) || 0;
         });
 
         const monthlyCuts = parseInt(document.getElementById("monthlyCuts").value) || 0;
@@ -127,19 +114,17 @@ document.addEventListener("DOMContentLoaded", () => {
         totalScore += cutScore;
 
         displayResults(totalScore, annualCuts, cutScore);
-    });
+    };
 
-    function calculateCutScore(annualCuts) {
-        if (annualCuts < 6000) {
-            return 5;
-        } else if (annualCuts < 9500) {
-            return (0.01 * annualCuts - 45).toFixed(1);
-        } else {
-            return 50;
-        }
-    }
+    // カット点数の計算
+    const calculateCutScore = annualCuts => {
+        if (annualCuts < 6000) return 5;
+        if (annualCuts < 9500) return (0.01 * annualCuts - 45).toFixed(1);
+        return 50;
+    };
 
-    function displayResults(totalScore, annualCuts, cutScore) {
+    // 結果の表示
+    const displayResults = (totalScore, annualCuts, cutScore) => {
         document.getElementById("blockNameDisplay").textContent = basicInfo.blockName;
         document.getElementById("storeNameDisplay").textContent = basicInfo.storeName;
         document.getElementById("employeeIdDisplay").textContent = basicInfo.employeeId;
@@ -150,96 +135,90 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("annualCutsDisplay").textContent = annualCuts.toLocaleString();
         document.getElementById("cutScoreDisplay").textContent = cutScore;
 
-        // ランク判定
         const rank = rankData.find(rank => totalScore >= rank.min_score && (rank.max_score === null || totalScore <= rank.max_score));
-        if (rank) {
-            document.getElementById("rank").textContent = rank.rank;
-            document.getElementById("salaryCap").textContent = rank.salary_cap.toLocaleString();
-        } else {
-            document.getElementById("rank").textContent = "ランク外";
-            document.getElementById("salaryCap").textContent = "N/A";
+        document.getElementById("rank").textContent = rank ? rank.rank : "ランク外";
+        document.getElementById("salaryCap").textContent = rank ? rank.salary_cap.toLocaleString() : "N/A";
+
+        switchPage(evaluationPage, resultPage);
+    };
+
+    document.getElementById("proceedToEvaluation")?.addEventListener("click", () => {
+        basicInfo.blockName = document.getElementById("blockName").value.trim();
+        basicInfo.storeName = document.getElementById("storeName").value.trim();
+        basicInfo.employeeId = document.getElementById("employeeId").value.trim();
+        basicInfo.employeeName = document.getElementById("employeeName").value.trim();
+        basicInfo.currentSalary = parseFloat(document.getElementById("currentSalary").value) || 0;
+
+        if (!basicInfo.blockName || !basicInfo.storeName || !basicInfo.employeeId || !basicInfo.employeeName || !basicInfo.currentSalary) {
+            alert("すべての項目を正しく入力してください！");
+            return;
         }
 
-        evaluationPage.classList.add("hidden");
-        resultPage.classList.remove("hidden");
-    }
+        switchPage(basicInfoPage, evaluationPage);
+        initializeEvaluationItems();
+    });
 
-    document.getElementById("restartBtn").addEventListener("click", () => {
-        resultPage.classList.add("hidden");
-        basicInfoPage.classList.remove("hidden");
+    document.getElementById("calculateBtn")?.addEventListener("click", calculateResults);
+
+    document.getElementById("restartBtn")?.addEventListener("click", () => {
+        switchPage(resultPage, basicInfoPage);
         document.getElementById("basicInfoForm").reset();
         document.getElementById("evaluationForm").reset();
         evaluationTable.innerHTML = "";
     });
 
     // Excel形式で出力
-    document.getElementById("exportBtn").addEventListener("click", () => {
+    document.getElementById("exportBtn")?.addEventListener("click", () => {
         const workbook = XLSX.utils.book_new();
 
         // 基本情報シート
-        const basicInfoData = [
+        const basicInfoSheet = XLSX.utils.aoa_to_sheet([
             ["ブロック名", basicInfo.blockName],
             ["店舗名", basicInfo.storeName],
             ["社員番号", basicInfo.employeeId],
             ["氏名", basicInfo.employeeName],
             ["現在の基本給", basicInfo.currentSalary.toLocaleString()],
-        ];
-        const basicInfoSheet = XLSX.utils.aoa_to_sheet(basicInfoData);
-
-        // 列幅を設定
-        basicInfoSheet['!cols'] = [
-            { wch: 15 }, // ブロック名
-            { wch: 30 }  // 内容列の幅
-        ];
+        ]);
+        basicInfoSheet['!cols'] = [{ wch: 15 }, { wch: 30 }];
 
         // 評価内容シート
         const evaluationDataArray = [["No", "カテゴリ", "評価項目", "内容", "点数"]];
-        const rows = document.querySelectorAll("#evaluationTable tr");
-        rows.forEach(row => {
+        document.querySelectorAll("#evaluationTable tr").forEach(row => {
             const cells = row.querySelectorAll("td");
-            const no = cells[0]?.textContent || "";
-            const category = cells[1]?.textContent || "";
-            const item = cells[2]?.textContent || "";
-            const description = cells[3]?.textContent || "";
-            const score = cells[4]?.querySelector("input")?.value || "";
-            evaluationDataArray.push([no, category, item, description, score]);
+            evaluationDataArray.push([
+                cells[0]?.textContent || "",
+                cells[1]?.textContent || "",
+                cells[2]?.textContent || "",
+                cells[3]?.textContent || "",
+                cells[4]?.querySelector("input")?.value || ""
+            ]);
         });
-        const evaluationSheet = XLSX.utils.aoa_to_sheet(evaluationDataArray);
 
-        // 列幅を設定
+        const evaluationSheet = XLSX.utils.aoa_to_sheet(evaluationDataArray);
         evaluationSheet['!cols'] = [
-            { wch: 3 },  // No
-            { wch: 25 }, // カテゴリ
-            { wch: 42 }, // 評価項目
-            { wch: 107 }, // 内容
-            { wch: 10 }  // 点数
+            { wch: 3 },
+            { wch: 25 },
+            { wch: 42 },
+            { wch: 107 },
+            { wch: 10 }
         ];
 
         // 結果シート
-        const resultData = [
+        const resultSheet = XLSX.utils.aoa_to_sheet([
             ["合計点", document.getElementById("totalScore").textContent],
             ["年間カット人数", document.getElementById("annualCutsDisplay").textContent],
             ["カット点数", document.getElementById("cutScoreDisplay").textContent],
             ["評価ランク", document.getElementById("rank").textContent],
             ["適正基本給", document.getElementById("salaryCap").textContent],
-        ];
-        const resultSheet = XLSX.utils.aoa_to_sheet(resultData);
+        ]);
+        resultSheet['!cols'] = [{ wch: 15 }, { wch: 20 }];
 
-        // 列幅を設定
-        resultSheet['!cols'] = [
-            { wch: 15 }, // ラベル
-            { wch: 20 }  // 値
-        ];
-
-        // シートをブックに追加
         XLSX.utils.book_append_sheet(workbook, basicInfoSheet, "基本情報");
         XLSX.utils.book_append_sheet(workbook, evaluationSheet, "評価内容");
         XLSX.utils.book_append_sheet(workbook, resultSheet, "評価結果");
 
-        // ファイル名に氏名を含める
-        const fileName = `評価結果_${basicInfo.employeeName || "未設定"}.xlsx`;
-        XLSX.writeFile(workbook, fileName);
+        XLSX.writeFile(workbook, `評価結果_${basicInfo.employeeName || "未設定"}.xlsx`);
     });
 
-
+    initialize();
 });

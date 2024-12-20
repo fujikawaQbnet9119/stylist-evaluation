@@ -38,10 +38,17 @@
         </form>
     </div>
 
-    <!-- 評価入力ページ -->
     <div id="evaluationPage" class="container hidden">
         <h1>スタイリスト評価入力</h1>
-        <button id="toggleEvaluationContent" style="margin-bottom: 15px;">評価内容を表示/非表示</button>
+        <!-- カテゴリフィルタ -->
+        <div style="margin-bottom: 15px;">
+            <label for="categoryFilter">カテゴリを選択:</label>
+            <select id="categoryFilter">
+                <option value="all">すべて</option>
+            </select>
+        </div>
+        <!-- 評価内容の表示/非表示ボタン -->
+        <button id="toggleEvaluationContent">評価内容を非表示</button>
         <form id="evaluationForm">
             <table>
                 <thead>
@@ -65,6 +72,8 @@
             <button type="button" id="calculateBtn">評価結果を確認</button>
         </form>
     </div>
+    
+    
 
     <!-- 評価結果ページ -->
     <div id="resultPage" class="container hidden">
