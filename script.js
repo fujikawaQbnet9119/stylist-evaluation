@@ -103,7 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
             cell.style.display = isVisible ? "none" : "table-cell";
         });
 
-        toggleButton.textContent = isVisible ? "評価内容を表示" : "評価内容を非表示";
+        toggleButton.textContent = isVisible ? "評価内容表示" : "評価内容非表示";
     });
 
     // 評価結果の計算と表示
@@ -193,7 +193,7 @@ document.addEventListener("DOMContentLoaded", () => {
             ["店舗名", basicInfo.storeName],
             ["社員番号", basicInfo.employeeId],
             ["氏名", basicInfo.employeeName],
-            ["現在の基本給", basicInfo.currentSalary.toLocaleString()],
+            ["現基本給", basicInfo.currentSalary.toLocaleString()],
         ]);
         basicInfoSheet['!cols'] = [{ wch: 15 }, { wch: 30 }];
 
@@ -223,7 +223,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // 結果シート
         const resultSheet = XLSX.utils.aoa_to_sheet([
             ["合計点", document.getElementById("totalScore").textContent],
-            ["年間カット人数", document.getElementById("annualCutsDisplay").textContent],
+            ["年間カット人数換算", document.getElementById("annualCutsDisplay").textContent],
             ["カット点数", document.getElementById("cutScoreDisplay").textContent],
             ["評価ランク", document.getElementById("rank").textContent],
             ["適正基本給", document.getElementById("salaryCap").textContent],

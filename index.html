@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>スタイリスト評価フォーム</title>
+    <title>評価フォーム</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/choices.js/10.2.0/styles/choices.min.css">
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/choices.js/10.2.0/choices.min.js"></script>
@@ -12,7 +12,7 @@
 <body>
     <!-- 基本情報入力ページ -->
     <div id="basicInfoPage" class="container">
-        <h1>基本情報の入力</h1>
+        <h1>基本情報</h1>
         <form id="basicInfoForm">
             <div class="form-group">
                 <label for="blockName">ブロック名:</label>
@@ -31,24 +31,24 @@
                 <input type="text" id="employeeName" name="employeeName" required>
             </div>
             <div class="form-group">
-                <label for="currentSalary">現在の基本給 (円):</label>
+                <label for="currentSalary">現基本給 (円):</label>
                 <input type="number" id="currentSalary" name="currentSalary" required>
             </div>
-            <button type="button" id="proceedToEvaluation">評価入力に進む</button>
+            <button type="button" id="proceedToEvaluation">評価入力へ</button>
         </form>
     </div>
 
     <div id="evaluationPage" class="container hidden">
-        <h1>スタイリスト評価入力</h1>
+        <h1>スタイリスト評価</h1>
         <!-- カテゴリフィルタ -->
         <div style="margin-bottom: 15px;">
-            <label for="categoryFilter">カテゴリを選択:</label>
+            <label for="categoryFilter">カテゴリ選択:</label>
             <select id="categoryFilter">
                 <option value="all">すべて</option>
             </select>
         </div>
         <!-- 評価内容の表示/非表示ボタン -->
-        <button id="toggleEvaluationContent">評価内容を非表示</button>
+        <button id="toggleEvaluationContent">評価内容非表示</button>
         <form id="evaluationForm">
             <table>
                 <thead>
@@ -68,8 +68,8 @@
                 <label for="monthlyCuts">最新月の月間カット人数:</label>
                 <input type="number" id="monthlyCuts" name="monthlyCuts" min="0" value="0">
             </div>
-            <button type="button" id="backToBasicInfo">前に戻る</button>
-            <button type="button" id="calculateBtn">評価結果を確認</button>
+            <button type="button" id="backToBasicInfo">戻る</button>
+            <button type="button" id="calculateBtn">評価結果確認</button>
         </form>
     </div>
     
@@ -85,19 +85,19 @@
                 <p>店舗名: <span id="storeNameDisplay"></span></p>
                 <p>社員番号: <span id="employeeIdDisplay"></span></p>
                 <p>氏名: <span id="employeeNameDisplay"></span></p>
-                <p>現在の基本給: <span id="currentSalaryDisplay"></span> 円</p>
+                <p>現基本給: <span id="currentSalaryDisplay"></span> 円</p>
             </div>
             <div class="card-section">
                 <h2>評価結果</h2>
                 <p>合計点: <span id="totalScore"></span></p>
                 <p>評価ランク: <span id="rank"></span></p>
                 <p>適正基本給: <span id="salaryCap"></span> 円</p>
-                <p>最新月の月間カット人数: <span id="monthlyCutsDisplay"></span> 人 / 年間カット人数: <span id="annualCutsDisplay"></span> 人 (点数: <span id="cutScoreDisplay"></span>)</p>
+                <p>月間カット人数: <span id="monthlyCutsDisplay"></span> 人 / 年間カット人数換算: <span id="annualCutsDisplay"></span> 人 (点数: <span id="cutScoreDisplay"></span>)</p>
             </div>
         </div>
-        <button type="button" id="backToEvaluation">前に戻る</button>
+        <button type="button" id="backToEvaluation">戻る</button>
         <button type="button" id="restartBtn">最初に戻る</button>
-        <button type="button" id="exportBtn">Excelで出力</button>
+        <button type="button" id="exportBtn">Excel出力</button>
     </div>
 
     <script src="script.js"></script>
