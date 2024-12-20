@@ -1,17 +1,17 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // DOM要素の取得
     const basicInfoPage = document.getElementById("basicInfoPage");
     const evaluationPage = document.getElementById("evaluationPage");
     const resultPage = document.getElementById("resultPage");
     const evaluationTable = document.getElementById("evaluationTable");
-    const toggleButton = document.getElementById("toggleEvaluationContent"); // 評価内容の表示/非表示ボタン
-    const categoryFilter = document.getElementById("categoryFilter"); // フィルタの取得
+
+    const toggleButton = document.getElementById("toggleEvaluationContent");
+    const categoryFilter = document.getElementById("categoryFilter");
 
     const basicInfo = {};
     let evaluationData = [];
     let rankData = [];
 
-    // JSONデータをロードする関数
+    // JSONデータをロード (評価項目)
     const loadJSON = async (url, callback) => {
         try {
             const response = await fetch(url);
@@ -23,46 +23,45 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
-    // 初期化関数
     const initialize = () => {
         loadJSON("evaluationItems.json", data => {
             evaluationData = data;
             initializeCategoryFilter();
+            initializeEvaluationItems();
         });
-        loadJSON("evaluationRank.json", data => (rankData = data));
+        loadJSON("evaluationRank.json", data => {
+            rankData = data;
+        });
     };
 
-    // ページ遷移関数
     const switchPage = (hidePage, showPage) => {
         if (!hidePage || !showPage) {
-            console.error("ページが見つかりません。", { hidePage, showPage });
+            console.error("ページ切り替えエラー: 要素が見つかりません。", { hidePage, showPage });
             return;
         }
-        console.log("ページ切り替え:", { hidePage, showPage });
         hidePage.classList.add("hidden");
         showPage.classList.remove("hidden");
     };
 
-    // 評価項目を動的に生成
     const initializeEvaluationItems = () => {
-        evaluationTable.innerHTML = ""; // 再生成時のクリア
+        evaluationTable.innerHTML = "";
         evaluationData.forEach(({ no, category, item, description, points }) => {
             const row = document.createElement("tr");
             const maxPoint = Math.max(...points);
             const minPoint = Math.min(...points);
-    
+
             row.innerHTML = `
                 <td>${no}</td>
                 <td>${category}</td>
                 <td>${item}</td>
                 <td class="evaluation-content">${description}</td>
                 <td style="text-align: center;">
-                    <input type="range" 
-                        class="scoreSlider" 
-                        min="${minPoint}" 
-                        max="${maxPoint}" 
-                        value="${maxPoint}" 
-                        step="1" 
+                    <input type="range"
+                        class="scoreSlider"
+                        min="${minPoint}"
+                        max="${maxPoint}"
+                        value="${maxPoint}"
+                        step="1"
                         oninput="this.nextElementSibling.textContent = this.value" />
                     <span class="sliderValue">${maxPoint}</span>
                 </td>
@@ -70,10 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
             evaluationTable.appendChild(row);
         });
     };
-    
-    
 
-    // カテゴリフィルタの初期化
     const initializeCategoryFilter = () => {
         categoryFilter.innerHTML = '<option value="all">すべて</option>';
         const categories = [...new Set(evaluationData.map(item => item.category))];
@@ -85,7 +81,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     };
 
-    // カテゴリフィルタ変更時の動作
     categoryFilter?.addEventListener("change", e => {
         const category = e.target.value;
         document.querySelectorAll("#evaluationTable tr").forEach(row => {
@@ -94,7 +89,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // 評価内容の表示/非表示ボタンの実装
     toggleButton?.addEventListener("click", () => {
         const contentCells = document.querySelectorAll(".evaluation-content");
         const isVisible = contentCells[0]?.style.display !== "none";
@@ -106,29 +100,35 @@ document.addEventListener("DOMContentLoaded", () => {
         toggleButton.textContent = isVisible ? "評価内容表示" : "評価内容非表示";
     });
 
-    // 評価結果の計算と表示
     const calculateResults = () => {
         let totalScore = 0;
-        document.querySelectorAll(".scoreInput").forEach(input => {
-            totalScore += parseFloat(input.value) || 0;
+
+        document.querySelectorAll(".scoreSlider").forEach(input => {
+            const value = parseFloat(input.value);
+            if (!isNaN(value)) {
+                totalScore += value;
+            }
         });
 
-        const monthlyCuts = parseInt(document.getElementById("monthlyCuts").value) || 0;
+        const monthlyCuts = parseInt(document.getElementById("monthlyCuts").value, 10) || 0;
         const annualCuts = monthlyCuts * 12;
         const cutScore = calculateCutScore(annualCuts);
+
         totalScore += cutScore;
 
         displayResults(totalScore, annualCuts, cutScore);
     };
 
-    // カット点数の計算
     const calculateCutScore = annualCuts => {
-        if (annualCuts < 6000) return 5;
-        if (annualCuts < 9500) return (0.01 * annualCuts - 45).toFixed(1);
+        if (annualCuts < 6000) {
+            return 5;
+        }
+        if (annualCuts < 9500) {
+            return Math.max(0, (0.01 * annualCuts - 45).toFixed(1));
+        }
         return 50;
     };
 
-    // 結果の表示
     const displayResults = (totalScore, annualCuts, cutScore) => {
         document.getElementById("blockNameDisplay").textContent = basicInfo.blockName;
         document.getElementById("storeNameDisplay").textContent = basicInfo.storeName;
@@ -138,14 +138,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
         document.getElementById("totalScore").textContent = totalScore.toFixed(1);
         document.getElementById("annualCutsDisplay").textContent = annualCuts.toLocaleString();
-        document.getElementById("cutScoreDisplay").textContent = cutScore;
+        document.getElementById("cutScoreDisplay").textContent = cutScore.toFixed(1);
 
-        const rank = rankData.find(rank => totalScore >= rank.min_score && (rank.max_score === null || totalScore <= rank.max_score));
+        const rank = rankData.find(rank => totalScore >= rank.min_score &&
+            (rank.max_score === null || totalScore <= rank.max_score));
+
         document.getElementById("rank").textContent = rank ? rank.rank : "ランク外";
         document.getElementById("salaryCap").textContent = rank ? rank.salary_cap.toLocaleString() : "N/A";
 
         switchPage(evaluationPage, resultPage);
     };
+
+    document.getElementById("calculateBtn")?.addEventListener("click", calculateResults);
 
     document.getElementById("proceedToEvaluation")?.addEventListener("click", () => {
         basicInfo.blockName = document.getElementById("blockName").value.trim();
@@ -160,34 +164,26 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         switchPage(basicInfoPage, evaluationPage);
-        initializeEvaluationItems();
     });
 
-    document.getElementById("calculateBtn")?.addEventListener("click", calculateResults);
-
     document.getElementById("backToBasicInfo")?.addEventListener("click", () => {
-        console.log("評価入力ページ -> 基本情報ページ");
         switchPage(evaluationPage, basicInfoPage);
     });
 
     document.getElementById("backToEvaluation")?.addEventListener("click", () => {
-        console.log("評価結果ページ -> 評価入力ページ");
         switchPage(resultPage, evaluationPage);
     });
 
     document.getElementById("restartBtn")?.addEventListener("click", () => {
-        console.log("評価結果ページ -> 基本情報ページ");
         switchPage(resultPage, basicInfoPage);
         document.getElementById("basicInfoForm").reset();
         document.getElementById("evaluationForm").reset();
         evaluationTable.innerHTML = "";
     });
 
-    // Excel形式で出力
     document.getElementById("exportBtn")?.addEventListener("click", () => {
         const workbook = XLSX.utils.book_new();
 
-        // 基本情報シート
         const basicInfoSheet = XLSX.utils.aoa_to_sheet([
             ["ブロック名", basicInfo.blockName],
             ["店舗名", basicInfo.storeName],
@@ -197,7 +193,6 @@ document.addEventListener("DOMContentLoaded", () => {
         ]);
         basicInfoSheet['!cols'] = [{ wch: 15 }, { wch: 30 }];
 
-        // 評価内容シート
         const evaluationDataArray = [["No", "カテゴリ", "評価項目", "内容", "点数"]];
         document.querySelectorAll("#evaluationTable tr").forEach(row => {
             const cells = row.querySelectorAll("td");
@@ -219,8 +214,6 @@ document.addEventListener("DOMContentLoaded", () => {
             { wch: 10 }
         ];
 
-
-        // 結果シート
         const resultSheet = XLSX.utils.aoa_to_sheet([
             ["合計点", document.getElementById("totalScore").textContent],
             ["年間カット人数換算", document.getElementById("annualCutsDisplay").textContent],
